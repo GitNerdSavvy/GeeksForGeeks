@@ -9,10 +9,12 @@ class Solution {
     void reverseArray(vector<int> &arr) {
         // code here
         int n=arr.size();
-        for(int i=0;i<n/2;i++){
-            int temp = arr[i];
-            arr[i] = arr[n-i-1];
-            arr[n-i-1] = temp;
+        int l=0;
+        int r=n-1;
+        while(l<r){
+            swap(arr[l],arr[r]);
+            l++;
+            r--;
         }
     }
 };
