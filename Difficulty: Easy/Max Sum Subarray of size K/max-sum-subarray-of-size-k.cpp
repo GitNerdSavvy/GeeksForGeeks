@@ -8,26 +8,16 @@ class Solution {
   public:
     int maximumSumSubarray(vector<int>& arr, int k) {
         // code here
-        int n=arr.size();
         int sum=0;
-         int l=0;
-        int r=k;
         for(int i=0;i<k;i++){
             sum+=arr[i];
         }
-          if (l==r) return sum;
-        int maxSum=sum;
-        
-       
-        while(r<n){
-           sum=sum-arr[l];
-           l++;
-           sum=sum+arr[r];
-           r++;
-          maxSum= max(sum,maxSum);
-            
-        }
-        return maxSum;
+       int res=sum;
+       for(int i=k;i<arr.size();i++){
+           sum+=arr[i]-arr[i-k];
+           res=max(res,sum);
+       }
+       return res;
     }
 };
 
