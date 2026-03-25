@@ -2,59 +2,51 @@
 
 class Solution {
   public:
-  #define vii vector<vector<int>>
-  #define f(i,s,e) for(int i=0;i<e;i++)
-  
-    int helpaterp(vector<vector<int>> hos) {
+  int row,col;
+  vector<vector<int>>dir{{-1,0},{1,0},{0,-1},{0,1}};
+  bool isValid(int r,int c){
+      if(r<0||r>=row || c<0 || c>=col) return false;
+      
+      return true;
+  }
+    int helpaterp(vector<vector<int>> hospital) {
         // code here
-        int n=hos.size();
-        int m=hos[0].size();
+        row=hospital.size();
+        col=hospital[0].size();
         
-        // vii vis(n,vector<int>(m,0));
         queue<pair<int,int>>q;
-        int cnt=0;
-        f(i,0,n){
-            f(j,0,m){
-                if(hos[i][j]==1){
-                    cnt++;
-                }else if(hos[i][j]==2){
-                    q.push({i,j});
-                    // vis[i][j]=2;
-                }
-                
-            }
-        }
-         if(cnt == 0) return 0; 
-        int ans=0;
-        q.push({-1,-1});
-        vii dir={{1,0},{0,1},{-1,0},{0,-1}};
+        for(int i=0;i<row;i++)
+        for(int j=0;j<col;j++)
+        if(hospital[i][j]==2)q.push(make_pair(i,j));
+        
+        int count=0;
         while(!q.empty()){
-            auto [x,y]=q.front();
+            bool infectedInThisRound = false;
+            int curr=q.size();
+            while(curr--){
+            auto [r,c]=q.front();
             q.pop();
-             if (x== -1 && y == -1) {
-                    ans++;
-                    if (!q.empty()) {
-                        q.push({-1, -1});
-                    } else {
-                        break;
-                    }
-                } 
-           else {
-               f(d,0,4){
-                int r=x+dir[d][0];
-                int c=y+dir[d][1];
-                
-                if(r<0 || c<0 || r>=n || c>=m) continue;
-                if(hos[r][c] != 1) continue;
-                
-                cnt--;
-                hos[r][c]=2;
-                q.push({r,c});
+            
+            for(int k=0;k<4;k++){
+                int x=r+dir[k][0];
+                int y=c+dir[k][1];
+                if(isValid(x,y)&&hospital[x][y]==1){
+                    hospital[x][y]=2;
+                    q.push(make_pair(x,y));
+                    infectedInThisRound = true;
+                }
+            }
                 
             }
-               
-           }
+            if (infectedInThisRound) count++;
         }
-        return cnt==0?ans-1:-1;
+         for(int i=0;i<row;i++)
+        for(int j=0;j<col;j++)
+        if(hospital[i][j]==1)return -1;
+        
+        return count;
+        
+        
+        
     }
 };
