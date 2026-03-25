@@ -1,36 +1,29 @@
 class Solution {
   public:
+    bool dfs(int node,int col,vector<int>adj[],vector<int>&color){
+       color[node]=col;
+        for(auto it:adj[node]){
+            if (color[it] == -1) {
+                if (!dfs(it, !col, adj, color)) return false;
+            } else if (color[it] == col) {
+                return false;
+            }
+        }
+        return true;
+    }
     bool isBipartite(int V, vector<vector<int>> &edges) {
         // Code here
         vector<int>adj[V];
-        for(int i=0;i<edges.size();i++){
-            int u=edges[i][0];
-            int v=edges[i][1];
+        for(auto it:edges){
+            int u=it[0];
+            int v=it[1];
             adj[u].push_back(v);
             adj[v].push_back(u);
         }
-        
         vector<int>color(V,-1);
-        queue<int>q;
-       for (int i = 0; i < V; i++) {
+        for(int i=0;i<V;i++){
             if (color[i] == -1) {
-                queue<int> q;
-                q.push(i);
-                color[i] = 0;
-
-                while (!q.empty()) {
-                    int node = q.front();
-                    q.pop();
-
-                    for (auto neighbor : adj[node]) {
-                        if (color[neighbor] == -1) {
-                            color[neighbor] = 1 - color[node];
-                            q.push(neighbor);
-                        } else if (color[neighbor] == color[node]) {
-                            return false;
-                        }
-                    }
-                }
+                if (!dfs(i, 0, adj, color)) return false;
             }
         }
         return true;
